@@ -25,7 +25,6 @@ public class killPlayer : MonoBehaviour
             {
                 PlayerPrefs.SetInt("Death", 0);
             }
-            PlayerPrefs.SetInt("Death", PlayerPrefs.GetInt("Death") + 1);
             GG.SetActive(true);
             minimap.SetActive(false);
             GG.GetComponent<Image>().color = new Color(GG.GetComponent<Image>().color.r, GG.GetComponent<Image>().color.g, GG.GetComponent<Image>().color.b, GG.GetComponent<Image>().color.a + 5 * Time.deltaTime);
@@ -41,6 +40,7 @@ public class killPlayer : MonoBehaviour
         if (other.tag == "Player")
         {
             //GameOver
+            PlayerPrefs.SetInt("Death", PlayerPrefs.GetInt("Death") + 1);
             GameOver = !GameOver;
         }
     }

@@ -8,31 +8,34 @@ public class OnlineRankingManager : MonoBehaviour
 {
     //Variables
     [SerializeField] private int leaderboardAmount = 20;
-    [SerializeField] private GameObject rankingPrefab;
+    //[SerializeField] private GameObject rankingPrefab;
     
     //dreamIO 
     private string secretLink = "http://dreamlo.com/lb/FjIRgeetbUK2yDXo0tvqCgRmBDxXsUHEiMxCbFhjHyMw";
     private string privateCode = "FjIRgeetbUK2yDXo0tvqCgRmBDxXsUHEiMxCbFhjHyMw";
     private string publicCode = "63dd375a8f40bb08f4c195e9";
 
-    //userName
-    private string userName = "";
+    [SerializeField]  public bool Test;
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Test)
+        {
+            Send();
+            Test = false;
+        }
     }
 
-    public void Send(string Username)
+    public void Send()
     {
-        string uri = "http://dreamlo.com/lb/" + privateCode + "/add/" + Username + "/" + (PlayerPrefs.HasKey("Death") ? PlayerPrefs.GetInt("Death").ToString() : "0");
+        string uri = "http://dreamlo.com/lb/" + privateCode + "/add/" + (PlayerPrefs.HasKey("username")?PlayerPrefs.GetString("username"):("RANDOM_"+Random.Range(0,9).ToString() + Random.Range(0, 9).ToString() + Random.Range(0, 9).ToString() + Random.Range(0, 9).ToString())) + "/" + (PlayerPrefs.HasKey("Death") ? PlayerPrefs.GetInt("Death").ToString() : "0") + "/" + (PlayerPrefs.HasKey("Time")?PlayerPrefs.GetFloat("Time").ToString(".00"):"9999999");
+        Debug.Log(uri);
         StartCoroutine(WebRequestHandler(uri));
     }
 
@@ -60,6 +63,8 @@ public class OnlineRankingManager : MonoBehaviour
                     break;
             }
         }
+
+        Application.Quit();
     }
 
 }

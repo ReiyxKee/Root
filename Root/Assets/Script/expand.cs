@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class expand : MonoBehaviour
 {
+    public bool hardmode = false;
     float timer = 0;
     public float time = 0;
     // Start is called before the first frame update
     void Start()
     {
-        
+        hardmode = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        time += Time.deltaTime;
-        timer += 0.0025f * Time.deltaTime;
+        time += Time.fixedDeltaTime;
 
-        this.transform.localScale = new Vector3(this.transform.localScale.x + timer * 0.25f *timer, this.transform.localScale.y, this.transform.localScale.z);
+        this.transform.localScale = new Vector3(this.transform.localScale.x + (hardmode?(0.0075f*Time.deltaTime): (0.000125f * time)), this.transform.localScale.y, this.transform.localScale.z);
     }
 }

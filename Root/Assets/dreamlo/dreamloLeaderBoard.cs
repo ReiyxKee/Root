@@ -9,11 +9,11 @@ public class dreamloLeaderBoard : MonoBehaviour {
 	string dreamloWebserviceURL = "http://dreamlo.com/lb/";
 
 	public bool IUpgradedAndGotSSL = false;
-	public string privateCode = "";
-	public string publicCode = "";
-	
-	string highScores = "";
-	
+	public string privateCode = "FjIRgeetbUK2yDXo0tvqCgRmBDxXsUHEiMxCbFhjHyMw";
+	public string publicCode = "63dd375a8f40bb08f4c195e9";
+
+	public string highScores = "";
+	public string[] scoreArray;
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// A player named Carmine got a score of 100. If the same name is added twice, we use the higher score.
@@ -27,7 +27,7 @@ public class dreamloLeaderBoard : MonoBehaviour {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	
+	[System.Serializable]
 	public struct Score {
 		public string playerName;
 		public int score;
@@ -48,6 +48,9 @@ public class dreamloLeaderBoard : MonoBehaviour {
 		}
 
 		this.highScores = "";
+
+		StartCoroutine(GetRequest("http://dreamlo.com/lb/63dd375a8f40bb08f4c195e9/pipe"));
+		scoreArray = ToStringArray();
 	}
 	
 	public static dreamloLeaderBoard GetSceneDreamloLeaderboard()
@@ -99,7 +102,7 @@ public class dreamloLeaderBoard : MonoBehaviour {
 		StartCoroutine(GetRequest(dreamloWebserviceURL + privateCode + "/add-pipe/" + UnityWebRequest.EscapeURL(playerName) + "/" + totalScore.ToString() + "/" + totalSeconds.ToString()+ "/" + shortText));
 	}
 	
-	void GetScores()
+	public void GetScores()
 	{
 		highScores = "";
 		StartCoroutine(GetRequest(dreamloWebserviceURL +  publicCode  + "/pipe"));
@@ -111,7 +114,7 @@ public class dreamloLeaderBoard : MonoBehaviour {
 		StartCoroutine(GetRequest(dreamloWebserviceURL +  publicCode  + "/pipe-get/" + UnityWebRequest.EscapeURL(playerName)));
 	}
 
-	IEnumerator GetRequest(string url)
+	public IEnumerator GetRequest(string url)
 	{
 		// Something not working? Try copying/pasting the url into your web browser and see if it works.
 		// Debug.Log(url);
@@ -119,7 +122,8 @@ public class dreamloLeaderBoard : MonoBehaviour {
 		using (UnityWebRequest www = UnityWebRequest.Get(url))
 		{
 			yield return www.SendWebRequest();
-			highScores = www.downloadHandler.text;
+			highScores = www.downloadHandler.text;			
+			scoreArray = ToStringArray();
 		}
 	}
 	
@@ -161,6 +165,8 @@ public class dreamloLeaderBoard : MonoBehaviour {
 	
 	public Score[] ToScoreArray()
 	{
+		GetScores();
+		Debug.Log(highScores);
 		var rows = ToStringArray();
 		if (rows == null) return null;
 		

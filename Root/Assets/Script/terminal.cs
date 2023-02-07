@@ -31,14 +31,15 @@ public class terminal : MonoBehaviour
             hint.text = Command;
             inputcode.gameObject.SetActive(true);
 
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
             {
                 Resolve();
+                inputcode.text = "";
             }
         }
-        else if(command && resolved && Input.GetKeyDown(KeyCode.Return))
+        else if(command && resolved && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
         {
-            on9.Send(names.text);
+            on9.Send();
         }
     }
 
@@ -46,13 +47,23 @@ public class terminal : MonoBehaviour
     {
         Debug.Log(inputcode.text);
         Debug.Log(Command);
-        if (inputcode.text == Command)
+        if (inputcode.text.ToUpper() == Command)
         {
             RedAlert.SetActive(false);
-            PlayerPrefs.SetFloat("Time" , Expand.time);
+            if (PlayerPrefs.HasKey("Time"))
+            {
+                if (Expand.time < PlayerPrefs.GetFloat("Time"))
+                {
+                    PlayerPrefs.SetFloat("Time", Expand.time);
+                }
+            }
+            else
+            {
+                PlayerPrefs.SetFloat("Time", Expand.time);
+            }
             names.gameObject.SetActive(true);
             resolved = !resolved;
-            Application.Quit();
+            on9.Send();
         }
     }
 

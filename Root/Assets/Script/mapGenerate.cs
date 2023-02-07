@@ -120,7 +120,7 @@ public class mapGenerate : MonoBehaviour
         }
     }
 }
-
+/*
 [CustomEditor(typeof(mapGenerate))]
 public class mapGenEditor : Editor
 {
@@ -150,4 +150,4 @@ public class mapGenEditor : Editor
             mapGen.RegenerateRegisteredMap();
         }
     }
-}
+}*/
